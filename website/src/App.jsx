@@ -7,6 +7,8 @@ import { DiagnosticsService } from './components/services/diagonistics';
 import { AirConditioningService } from './components/services/conditioning';
 import { MOTService } from './components/services/services';
 import { Toaster } from 'sonner';
+import { motion } from 'framer-motion';
+import { ChevronRight } from 'lucide-react';
 
 // NavLinks Component for desktop navigation
 export const NavLinks = ({ scrolled }) => {
@@ -166,7 +168,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button 
-            className="md:hidden text-white"
+            className="md:hidden text-gray-800"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X /> : <Menu />}
@@ -232,21 +234,25 @@ const Home = () => {
               title="MOT & Servicing"
               description="Class 4 & 7 MOT testing with comprehensive vehicle servicing"
               icon="🔧"
+              onLearnMore={()=>navigate('/mot-servicing')}
             />
             <ServiceCard 
               title="General Repairs"
               description="Expert repairs for all makes and models"
               icon="🚗"
+              onLearnMore={()=>navigate('/repairs')}
             />
             <ServiceCard 
               title="Diagnostics"
               description="State-of-the-art diagnostic testing"
               icon="📊"
+              onLearnMore={()=>navigate('/diagnostics')}
             />
             <ServiceCard 
               title="Air Conditioning"
               description="Complete A/C servicing and repairs"
               icon="❄️"
+              onLearnMore={()=>navigate('/air-conditioning')}
             />
           </div>
         </div>
@@ -349,7 +355,48 @@ const Footer = () => {
 };
 
 // Helper Components
-const ServiceCard = ({ title, description, icon }) => (
+const ServiceCard = ({ title, description, icon, onLearnMore }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      className="bg-white p-6 rounded-xl shadow-lg transition-all duration-300 h-full flex flex-col justify-between"
+      whileHover={{ y: -5 }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+    >
+      <div>
+        <div className="text-4xl mb-4 text-blue-600">{icon}</div>
+        <h3 className="text-xl font-semibold mb-2">{title}</h3>
+        <p className="text-gray-600 mb-6">{description}</p>
+      </div>
+
+      <motion.button
+        className="group flex items-center gap-2 text-blue-600 font-medium hover:text-blue-700 transition-colors"
+        onClick={onLearnMore}
+        animate={{
+          x: isHovered ? 5 : 0,
+        }}
+      >
+        Learn More
+        <motion.div
+          animate={{
+            x: isHovered ? 5 : 0,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 20
+          }}
+        >
+          <ChevronRight className="w-5 h-5" />
+        </motion.div>
+      </motion.button>
+    </motion.div>
+  );
+};
+
+const ServiceCard2 = ({ title, description, icon }) => (
   <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
     <div className="text-4xl mb-4">{icon}</div>
     <h3 className="text-xl font-semibold mb-2">{title}</h3>
